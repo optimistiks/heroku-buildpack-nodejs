@@ -361,6 +361,7 @@ restore_cache() {
       done
     fi
   else
+    echo "No cache exists in $CACHE_DIR"
     # No cache exists, be silent
     :
   fi
