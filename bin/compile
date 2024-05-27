@@ -417,14 +417,17 @@ cache_build() {
     # so be silent here
     :
   elif [[ "$cache_directories" == "" ]]; then
-    header "Caching build"
+    header "Caching DEFAULT CACHE DIRS build"
     save_default_cache_directories "$BUILD_DIR" "$CACHE_DIR" "$YARN_CACHE_FOLDER" "$NPM_CONFIG_CACHE" "$PNPM_CONFIG_CACHE"
   else
-    header "Caching build"
+    header "Caching CUSTOM CACHE DIRS build"
     save_custom_cache_directories "$BUILD_DIR" "$CACHE_DIR" "$cache_directories"
   fi
   save_signature "$CACHE_DIR"
   meta_time "save-cache-time" "$cache_build_start_time"
+  echo "CACHE SAVED TO $CACHE_DIR"
+  echo "CACHE FOLDER CONTENTS:"
+  ls -la $CACHE_DIR
 }
 
 prune_devdependencies() {
@@ -436,7 +439,10 @@ prune_devdependencies() {
     npm_prune_devdependencies "$BUILD_DIR"
   fi
 }
-
+echo "PREPARING TO CACHE BUILD"
+echo "CURRENT CACHE FOLDER $CACHE_DIR"
+echo "CURRENT CACHE FOLDER CONTENTS"
+ls -la $CACHE_DIR
 if $YARN_2; then
   meta_set "build-step" "save-cache"
   cache_build | output "$LOG_FILE"
